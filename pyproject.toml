@@ -1,9 +1,24 @@
 [project]
-name = "recipe-to-md"
+name = "recipe_to_json"
 version = "0.1.0"
-description = "Add your description here"
+description = "A tool to convert recipes from URLs into JSON format."
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "curl-cffi>=0.14.0",
+    "langchain>=1.2.9",
+    "langchain-google-genai>=4.2.0",
     "markitdown[pdf]>=0.1.4",
+    "pydantic>=2.12.5",
+    "python-dotenv>=1.2.1",
+    "typer>=0.21.1",
 ]
+
+[project.scripts]
+recipe_to_json = "recipe_to_json.cli.cli:app"
+
+[tool.uv]
+package = true
+
+[tool.setuptools]
+packages = ["recipe_to_json"]
