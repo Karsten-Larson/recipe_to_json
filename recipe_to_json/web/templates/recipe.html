@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>{{ recipe.title }}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <a href="/" class="inline-block mb-4 text-blue-500 hover:text-blue-700 font-semibold">&larr; Back to Recipes</a>
+
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            {% if recipe.image_url %}
+            <img src="{{ recipe.image_url }}" alt="{{ recipe.title }}" class="w-full h-64 object-cover">
+            {% endif %}
+
+            <div class="p-6">
+                <h1 class="text-3xl font-bold mb-4 text-gray-800">{{ recipe.title }}</h1>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    {% if recipe.serves %}
+                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-blue-800">Serves</h3>
+                        <p class="text-2xl font-bold text-blue-600">{{ recipe.serves }}</p>
+                    </div>
+                    {% endif %}
+                    {% if recipe.time.prep_time %}
+                    <div class="bg-green-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-green-800">Prep Time</h3>
+                        <p class="text-lg text-green-600">{{ recipe.time.prep_time }}</p>
+                    </div>
+                    {% endif %}
+                    {% if recipe.time.cook_time %}
+                    <div class="bg-orange-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-orange-800">Cook Time</h3>
+                        <p class="text-lg text-orange-600">{{ recipe.time.cook_time }}</p>
+                    </div>
+                    {% endif %}
+                </div>
+
+                {% if recipe.time.total_time %}
+                <div class="mb-6">
+                    <h3 class="font-semibold text-gray-700">Total Time</h3>
+                    <p class="text-lg text-gray-600">{{ recipe.time.total_time }}</p>
+                </div>
+                {% endif %}
+
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold mb-4 text-gray-800">Ingredients</h2>
+                    <ul class="space-y-2">
+                        {% for ingredient in recipe.ingredients %}
+                        <li class="flex items-center">
+                            <span class="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
+                            <span class="text-gray-700">{{ ingredient.quantity }} {{ ingredient.unit }} {{
+                                ingredient.name }}</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold mb-4 text-gray-800">Steps</h2>
+                    <ol class="space-y-4">
+                        {% for step in recipe.steps %}
+                        <li class="flex">
+                            <span
+                                class="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold mr-4">{{
+                                step.number }}</span>
+                            <p class="text-gray-700 leading-relaxed">{{ step.instruction }}</p>
+                        </li>
+                        {% endfor %}
+                    </ol>
+                </div>
+
+                {% if recipe.notes %}
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold mb-4 text-gray-800">Notes</h2>
+                    <ul class="space-y-2">
+                        {% for note in recipe.notes %}
+                        <li class="flex items-start">
+                            <span class="w-2 h-2 bg-yellow-500 rounded-full mr-3 mt-2"></span>
+                            <p class="text-gray-700 leading-relaxed">{{ note }}</p>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -9,6 +9,7 @@ A command-line tool that converts recipe websites into structured JSON format us
 - Uses Google Gemini AI for accurate recipe parsing
 - Supports batch processing of multiple URLs
 - Outputs clean, machine-readable JSON files
+- **Optional web interface** for viewing and managing recipes
 
 ## Installation
 
@@ -16,6 +17,24 @@ A command-line tool that converts recipe websites into structured JSON format us
 
 - Python 3.12 or higher
 - Google AI API key (for Gemini model)
+
+### Install Package
+
+```bash
+pip install recipe_to_json
+# or with uv
+uv pip install recipe_to_json
+```
+
+### Install with Web Interface
+
+To use the optional web interface:
+
+```bash
+pip install recipe_to_json[web]
+# or with uv
+uv pip install recipe_to_json[web]
+```
 
 ## Configuration
 
@@ -68,6 +87,46 @@ echo "https://example.com/recipe1" > urls.txt
 echo "https://example.com/recipe2" >> urls.txt
 recipe_to_json --urls-file urls.txt --output-dir ./my-recipes
 ```
+
+## Web Interface
+
+The package includes an optional web interface for viewing and managing your recipe collection.
+
+### Installation
+
+Install with web dependencies:
+
+```bash
+uv sync --extra web
+```
+
+### Running the Web Interface
+
+Start the web server:
+
+```bash
+recipe_to_json web --directory ./recipes
+```
+
+The web interface will be available at `http://127.0.0.1:5000`.
+
+### Features
+
+- **Recipe Gallery**: View all your recipes in a responsive card grid
+- **Recipe Details**: Click any recipe to see full details including ingredients, steps, and notes
+- **Add New Recipes**: Use the "Add Recipes" button to download new recipes directly from URLs
+- **Batch Processing**: Enter multiple URLs at once for batch downloading
+- **Responsive Design**: Works on desktop and mobile devices
+
+### Web Interface Usage
+
+1. **View Recipes**: Browse your recipe collection on the main page
+2. **Add Recipes**: Click the green "Add Recipes" button to open a modal
+3. **Enter URLs**: Paste recipe URLs (one per line) and click "Add Recipes"
+4. **Automatic Processing**: The system will download and parse the recipes using the same AI-powered extraction
+5. **Success Notification**: Get alerted when recipes are successfully added
+
+The web interface provides a user-friendly way to manage your recipe collection without using the command line.
 
 ## Output Format
 
@@ -135,6 +194,7 @@ recipe_to_json/
 - `curl-cffi` - Reliable HTTP requests
 - `pydantic` - Data validation
 - `typer` - CLI framework
+- `flask` - Web interface (optional)
 
 ## Contributing
 
