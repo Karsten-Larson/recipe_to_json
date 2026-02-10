@@ -8,7 +8,30 @@
 
 <body class="bg-gray-100 min-h-screen">
     <div class="container mx-auto px-4 py-8">
-        <h1 class="text-4xl font-bold text-center mb-8 text-gray-800">Recipes</h1>
+        <div class="flex justify-between items-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-800">Recipes</h1>
+            <button onclick="toggleForm()"
+                class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                </svg>
+                Add Recipes
+            </button>
+        </div>
+
+        <form id="addForm" style="display:none;" action="/add_recipes" method="post"
+            class="bg-white p-6 rounded-lg shadow-md mb-8">
+            <h2 class="text-xl font-semibold mb-4">Add New Recipes</h2>
+            <textarea name="urls" rows="4" placeholder="Enter recipe URLs, one per line"
+                class="w-full p-2 border border-gray-300 rounded mb-4"></textarea>
+            <div class="flex justify-end space-x-2">
+                <button type="button" onclick="toggleForm()"
+                    class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">Cancel</button>
+                <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">Add
+                    Recipes</button>
+            </div>
+        </form>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {% for recipe in recipes %}
             <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
@@ -45,6 +68,13 @@
             {% endfor %}
         </div>
     </div>
+
+    <script>
+        function toggleForm() {
+            const form = document.getElementById('addForm');
+            form.style.display = form.style.display === 'none' || form.style.display === '' ? 'block' : 'none';
+        }
+    </script>
 </body>
 
 </html>

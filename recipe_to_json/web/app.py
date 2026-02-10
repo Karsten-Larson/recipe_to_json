@@ -1,6 +1,10 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 import json
 import os
+from pathlib import Path
+from ..agent import GraphState, agent
+from langchain_core.runnables import RunnableConfig
+import asyncio
 
 app = Flask(__name__, template_folder=os.path.join(os.path.dirname(__file__), 'templates'))
 
@@ -29,6 +33,17 @@ def index():
                 except:
                     pass
     return render_template('index.html', recipes=recipes)
+
+@app.route('/add_recipes', methods=['POST'])
+def add_recipes():
+    urls_text = request.form.get('urls', '')
+    urls = [url.strip() for url in urls_text.split('\n') if url.strip()]
+    if urls:
+        output_path = Path(RECIPES_DIR)
+        states = [GraphState(selected_url=url, output_path=output_path) for url in urls]
+        config: RunnableConfig = {"max_concurrency": 5}
+        asyncio.run(agent.abatch(states, config=config, return_exceptions=False))
+    return redirect(url_for('index'))
 
 @app.route('/recipe/<filename>')
 def recipe(filename):
