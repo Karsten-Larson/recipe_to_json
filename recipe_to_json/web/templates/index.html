@@ -10,7 +10,7 @@
     <div class="container mx-auto px-4 py-8">
         <div class="flex justify-between items-center mb-8">
             <h1 class="text-4xl font-bold text-gray-800">Recipes</h1>
-            <button onclick="toggleForm()"
+            <button onclick="openModal()"
                 class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded flex items-center">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -20,18 +20,32 @@
             </button>
         </div>
 
-        <form id="addForm" style="display:none;" action="/add_recipes" method="post"
-            class="bg-white p-6 rounded-lg shadow-md mb-8">
-            <h2 class="text-xl font-semibold mb-4">Add New Recipes</h2>
-            <textarea name="urls" rows="4" placeholder="Enter recipe URLs, one per line"
-                class="w-full p-2 border border-gray-300 rounded mb-4"></textarea>
-            <div class="flex justify-end space-x-2">
-                <button type="button" onclick="toggleForm()"
-                    class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">Cancel</button>
-                <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">Add
-                    Recipes</button>
+        <!-- Modal -->
+        <div id="modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+            <div class="bg-white p-6 rounded-lg shadow-lg max-w-md w-full mx-4">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-semibold">Add New Recipes</h2>
+                    <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <form action="/add_recipes" method="post">
+                    <textarea name="urls" rows="4" placeholder="Enter recipe URLs, one per line"
+                        class="w-full p-2 border border-gray-300 rounded mb-4" required></textarea>
+                    <div class="flex justify-end space-x-2">
+                        <button type="button" onclick="closeModal()"
+                            class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">Cancel</button>
+                        <button type="submit"
+                            class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">Add
+                            Recipes</button>
+                    </div>
+                </form>
             </div>
-        </form>
+        </div>
+
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {% for recipe in recipes %}
             <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
@@ -70,9 +84,18 @@
     </div>
 
     <script>
-        function toggleForm() {
-            const form = document.getElementById('addForm');
-            form.style.display = form.style.display === 'none' || form.style.display === '' ? 'block' : 'none';
+        function openModal() {
+            document.getElementById('modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.add('hidden');
+        }
+
+        // Check for success parameter and show alert
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('success') === '1') {
+            alert('Recipes have been successfully downloaded and added!');
         }
     </script>
 </body>

@@ -43,6 +43,7 @@ def add_recipes():
         states = [GraphState(selected_url=url, output_path=output_path) for url in urls]
         config: RunnableConfig = {"max_concurrency": 5}
         asyncio.run(agent.abatch(states, config=config, return_exceptions=False))
+        return redirect(url_for('index', success='1'))
     return redirect(url_for('index'))
 
 @app.route('/recipe/<filename>')
