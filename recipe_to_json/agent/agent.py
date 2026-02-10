@@ -1,10 +1,12 @@
 from pydantic import BaseModel, Field
 from curl_cffi.requests import AsyncSession
-from markitdown import MarkItDown
-from io import BytesIO
+from markitdown import FileConversionException, MarkItDown
 from langgraph.graph import StateGraph, END
 from langchain_google_genai import ChatGoogleGenerativeAI
+
+from io import BytesIO
 from pathlib import Path
+from functools import partial
 
 from .models import Recipe
 
@@ -37,8 +39,14 @@ async def download_node(state: GraphState):
         return {"markdown_content": None}
 
     md = MarkItDown()
-    # MarkItDown can convert directly from a URL
-    result = md.convert(BytesIO(response.content))
+
+    try:
+        # MarkItDown can convert directly from a URL
+        result = md.convert(BytesIO(response.content))
+    except FileConversionException:
+        print(f"--- Conversion failed for {state.selected_url} ---")
+        return {"markdown_content": None}
+
     return {"markdown_content": result.text_content}
 
 
@@ -48,7 +56,8 @@ def extraction_node(state: GraphState):
     content = state.markdown_content
 
     if not content:
-        raise ValueError("No markdown content to extract from")
+        print(f"--- No markdown content to extract from {state.selected_url} ---")
+        return {"final_recipe": None}
     
     prompt = f"Extract the recipe details from this markdown content:\n\n{content}"
     recipe_object = structured_llm.invoke(prompt)
@@ -61,7 +70,8 @@ def save_node(state: GraphState):
     output_path = state.output_path
 
     if not recipe:
-        raise ValueError("No recipe to save")
+        print(f"--- No recipe to save for {state.selected_url} ---")
+        return {}
     
     # Create a filename based on the title
     filename = output_path / f"{recipe.title.replace(' ', '_').lower()}.json"
@@ -74,7 +84,14 @@ def save_node(state: GraphState):
         f.write(recipe.model_dump_json(indent=4))
     
     print(f"--- Recipe saved to {filename} ---")
-    return {"final_recipe": recipe}
+    return {}
+
+# Conditional functions to determine the next node
+def should_proceed_to(node: str, state: GraphState):
+    return node if state.markdown_content is not None else END
+
+should_proceed_to_extract = partial(should_proceed_to, "extract")
+should_proceed_to_save = partial(should_proceed_to, "save")
 
 # Define the workflow graph
 workflow = StateGraph(GraphState)
@@ -84,8 +101,8 @@ workflow.add_node("extract", extraction_node)
 workflow.add_node("save", save_node)
 
 workflow.set_entry_point("download")
-workflow.add_edge("download", "extract")
-workflow.add_edge("extract", "save")
+workflow.add_conditional_edges("download", should_proceed_to_extract)
+workflow.add_conditional_edges("extract", should_proceed_to_save)
 workflow.add_edge("save", END)
 
 agent = workflow.compile()
