@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Recipe Viewer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-4xl font-bold text-center mb-8 text-gray-800">Recipes</h1>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for recipe in recipes %}
+            <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+                {% if recipe.image_url %}
+                <img src="{{ recipe.image_url }}" alt="{{ recipe.title }}" class="w-full h-48 object-cover">
+                {% endif %}
+                <div class="p-4">
+                    <h2 class="text-xl font-semibold mb-2 text-gray-800">{{ recipe.title }}</h2>
+                    <div class="flex justify-between text-sm text-gray-600 mb-2">
+                        {% if recipe.serves %}
+                        <span>Serves: {{ recipe.serves }}</span>
+                        {% endif %}
+                        {% if recipe.steps_count %}
+                        <span>Steps: {{ recipe.steps_count }}</span>
+                        {% endif %}
+                    </div>
+                    <div class="text-sm text-gray-600 mb-4">
+                        {% if recipe.prep_time %}
+                        <span>Prep: {{ recipe.prep_time }}</span>
+                        {% endif %}
+                        {% if recipe.cook_time %}
+                        <span class="ml-2">Cook: {{ recipe.cook_time }}</span>
+                        {% endif %}
+                        {% if recipe.total_time %}
+                        <span class="ml-2">Total: {{ recipe.total_time }}</span>
+                        {% endif %}
+                    </div>
+                    <a href="/recipe/{{ recipe.file }}"
+                        class="inline-block bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition-colors">
+                        View Recipe
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+
+</html>

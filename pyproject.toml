@@ -14,6 +14,9 @@ dependencies = [
     "typer>=0.21.1",
 ]
 
+[project.optional-dependencies]
+web = ["flask>=3.0.0"]
+
 [project.scripts]
 recipe_to_json = "recipe_to_json.cli.cli:app"
 

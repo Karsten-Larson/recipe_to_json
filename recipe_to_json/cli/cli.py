@@ -1,5 +1,6 @@
 import typer
 import asyncio
+import os
 from pathlib import Path
 from langchain_core.runnables import RunnableConfig
 from ..agent import GraphState, agent
@@ -27,6 +28,18 @@ def main(
         states = [GraphState(selected_url=u, output_path=output_path) for u in urls]
         config: RunnableConfig = {"max_concurrency": 5}
         asyncio.run(agent.abatch(states, config=config, return_exceptions=False))
+
+@app.command()
+def web(directory: str = typer.Option("./recipes", help="Directory containing recipe JSON files")):
+    os.environ['RECIPES_DIR'] = directory
+
+    try:
+        from ..web.app import app
+    except ImportError:
+        typer.echo("Flask is not installed. Please install the 'web' extra to use this command.")
+        raise typer.Exit(1)
+
+    app.run(debug=True)
 
 if __name__ == "__main__":
     app()
