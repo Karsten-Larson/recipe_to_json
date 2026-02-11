@@ -12,6 +12,7 @@ dependencies = [
     "pydantic>=2.12.5",
     "python-dotenv>=1.2.1",
     "typer>=0.21.1",
+    "validators>=0.35.0",
 ]
 
 [project.optional-dependencies]

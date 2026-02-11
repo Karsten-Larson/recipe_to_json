@@ -59,7 +59,7 @@ uv pip install recipe_to_json[web]
 Extract a single recipe:
 
 ```bash
-recipe_to_json "https://example.com/recipe-url"
+recipe_to_json convert "https://example.com/recipe-url"
 ```
 
 ### Batch Processing
@@ -67,7 +67,7 @@ recipe_to_json "https://example.com/recipe-url"
 Process multiple URLs from a file:
 
 ```bash
-recipe_to_json --urls-file urls.txt
+recipe_to_json convert --urls-file urls.txt
 ```
 
 ### Options
@@ -80,12 +80,12 @@ recipe_to_json --urls-file urls.txt
 
 ```bash
 # Single recipe
-recipe_to_json "https://cooking.nytimes.com/recipes/1026790-crispy-chicken-with-lime-butter"
+recipe_to_json convert "https://cooking.nytimes.com/recipes/1026790-crispy-chicken-with-lime-butter"
 
 # Batch processing
 echo "https://example.com/recipe1" > urls.txt
 echo "https://example.com/recipe2" >> urls.txt
-recipe_to_json --urls-file urls.txt --output-dir ./my-recipes
+recipe_to_json convert --urls-file urls.txt --output-dir ./my-recipes
 ```
 
 ## Web Interface

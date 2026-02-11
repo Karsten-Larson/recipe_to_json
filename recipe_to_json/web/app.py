@@ -40,7 +40,7 @@ def add_recipes():
     urls = [url.strip() for url in urls_text.split('\n') if url.strip()]
     if urls:
         output_path = Path(RECIPES_DIR)
-        states = [GraphState(selected_url=url, output_path=output_path) for url in urls]
+        states = [GraphState(input_source=url, output_path=output_path) for url in urls]
         config: RunnableConfig = {"max_concurrency": 5}
         asyncio.run(agent.abatch(states, config=config, return_exceptions=False))
         return redirect(url_for('index', success='1'))
