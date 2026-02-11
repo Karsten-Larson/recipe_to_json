@@ -63,14 +63,14 @@
                         {% endif %}
                     </div>
                     <div class="text-sm text-gray-600 mb-4">
-                        {% if recipe.prep_time %}
-                        <span>Prep: {{ recipe.prep_time }}</span>
+                        {% if recipe.time.prep_time %}
+                        <span>Prep: {{ recipe.time.prep_time }}</span>
                         {% endif %}
-                        {% if recipe.cook_time %}
-                        <span class="ml-2">Cook: {{ recipe.cook_time }}</span>
+                        {% if recipe.time.cook_time %}
+                        <span class="ml-2">Cook: {{ recipe.time.cook_time }}</span>
                         {% endif %}
-                        {% if recipe.total_time %}
-                        <span class="ml-2">Total: {{ recipe.total_time }}</span>
+                        {% if recipe.time.total_time %}
+                        <span class="ml-2">Total: {{ recipe.time.total_time }}</span>
                         {% endif %}
                     </div>
                     <a href="/recipe/{{ recipe.file }}"

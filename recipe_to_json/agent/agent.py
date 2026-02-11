@@ -8,7 +8,7 @@ from io import BytesIO
 from pathlib import Path
 from functools import partial
 
-from .models import Recipe
+from ..models import Recipe
 
 # Load environment variables from .env file
 import dotenv
