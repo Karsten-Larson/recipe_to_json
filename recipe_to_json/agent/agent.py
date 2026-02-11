@@ -8,7 +8,7 @@ from io import BytesIO
 from pathlib import Path
 from functools import partial
 
-from .models import Recipe
+from ..models import Recipe
 
 # Load environment variables from .env file
 import dotenv
@@ -59,7 +59,7 @@ def extraction_node(state: GraphState):
         print(f"--- No markdown content to extract from {state.selected_url} ---")
         return {"final_recipe": None}
     
-    prompt = f"Extract the recipe details from this markdown content:\n\n{content}"
+    prompt = f"Extract the recipe details from this markdown content. Remove any unnecessary information like post comments or user annotations. Reformat values when necessary:\n\n{content}"
     recipe_object = structured_llm.invoke(prompt)
     
     return {"final_recipe": recipe_object}
